@@ -1,0 +1,295 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      --><title>HOW TO CREATE A COPY OF A HANDLES OBJECT</title><meta name="generator" content="MATLAB 7.9"><meta name="date" content="2009-09-29"><meta name="m-file" content="demoScript"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>HOW TO CREATE A COPY OF A HANDLES OBJECT</h1><!--introduction--><p>This script uses the class definition TestClass to create instances of TestClass and to clone its instances.</p><p>Written by Sam Oliver &amp; Bobby Nedelkovski<br>The MathWorks Australia Pty Ltd<br>Copyright 2009, The MathWorks, Inc.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">CREATE A CLONE - USING METHOD</a></li><li><a href="#2">ANOTHER WAY TO CLONE - USING CONSTRUCTOR</a></li></ul></div><h2>CREATE A CLONE - USING METHOD<a name="1"></a></h2><p>This procedure requires you to explicitly create a placeholder in memory for cloning the original object.</p><pre class="codeinput"><span class="comment">% Clear any class definitions in memory</span>
+clear <span class="string">classes</span>
+
+<span class="comment">% Create two instances of TestClass</span>
+a = TestClass();
+b = TestClass();
+
+<span class="comment">% Change the parameters in object 'a'</span>
+a.sam   = 5;
+a.bobby = 10;
+
+<span class="comment">% Confirm that the parameters in object 'b' are not changed</span>
+<span class="comment">% a.sam   = 5;</span>
+<span class="comment">% a.bobby = 10;</span>
+<span class="comment">% b.sam   = 1;</span>
+<span class="comment">% b.bobby = 2;</span>
+a
+b
+
+<span class="comment">% Call the copy object method to create a clone of 'a' using 'b'</span>
+copyobj(a,b);
+<span class="comment">% a.copyobj(b);  % Can use this syntax instead</span>
+
+<span class="comment">% Check the parameter values for 'a' and 'b' are the same</span>
+<span class="comment">% a.sam   = 5;</span>
+<span class="comment">% a.bobby = 10;</span>
+<span class="comment">% b.sam   = 5;</span>
+<span class="comment">% b.bobby = 10;</span>
+a
+b
+
+<span class="comment">% Change the parameters in object 'a' again</span>
+a.sam   = 500;
+a.bobby = 1000;
+
+<span class="comment">% Confirm the clone (or deep copy) is successfull by comparing 'a' and 'b'</span>
+<span class="comment">% a.sam   = 500;</span>
+<span class="comment">% a.bobby = 1000;</span>
+<span class="comment">% b.sam   = 5;</span>
+<span class="comment">% b.bobby = 10;</span>
+a
+b
+</pre><pre class="codeoutput">Warning: Objects of 'onCleanup' class exist.  Cannot clear this class or any of its super-classes. 
+a = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+b = 
+  TestClass handle
+
+  Properties:
+      sam: 1
+    bobby: 2
+a = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+b = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+a = 
+  TestClass handle
+
+  Properties:
+      sam: 500
+    bobby: 1000
+b = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+</pre><h2>ANOTHER WAY TO CLONE - USING CONSTRUCTOR<a name="2"></a></h2><p>This procedure implicitly creates a placeholder in memory for cloning the original object by way of the constructor.</p><pre class="codeinput">clear <span class="string">classes</span>
+
+<span class="comment">% Create an object of TestClass</span>
+a = TestClass();
+
+<span class="comment">% Change the parameters in object 'a'</span>
+a.sam   = 5;
+a.bobby = 10;
+
+<span class="comment">% Create a clone (or deep copy) of object 'a'</span>
+b = TestClass(a);
+
+<span class="comment">% Check the parameter values for 'a' and 'b' are the same</span>
+<span class="comment">% a.sam   = 5;</span>
+<span class="comment">% a.bobby = 10;</span>
+<span class="comment">% b.sam   = 5;</span>
+<span class="comment">% b.bobby = 10;</span>
+a
+b
+
+<span class="comment">% Change the parameters in object 'a' again</span>
+a.sam   = 500;
+a.bobby = 1000;
+
+<span class="comment">% Confirm the clone (or deep copy) is successfull by comparing 'a' and 'b'</span>
+<span class="comment">% a.sam   = 500;</span>
+<span class="comment">% a.bobby = 1000;</span>
+<span class="comment">% b.sam   = 5;</span>
+<span class="comment">% b.bobby = 10;</span>
+a
+b
+</pre><pre class="codeoutput">Warning: Objects of 'onCleanup' class exist.  Cannot clear this class or any of its super-classes. 
+a = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+b = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+a = 
+  TestClass handle
+
+  Properties:
+      sam: 500
+    bobby: 1000
+b = 
+  TestClass handle
+
+  Properties:
+      sam: 5
+    bobby: 10
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.9<br></p></div><!--
+##### SOURCE BEGIN #####
+%% HOW TO CREATE A COPY OF A HANDLES OBJECT
+% This script uses the class definition TestClass to create instances of
+% TestClass and to clone its instances.
+%
+% Written by Sam Oliver & Bobby Nedelkovski
+% The MathWorks Australia Pty Ltd
+% Copyright 2009, The MathWorks, Inc.
+
+%% CREATE A CLONE - USING METHOD
+% This procedure requires you to explicitly create a placeholder in memory
+% for cloning the original object.
+
+% Clear any class definitions in memory
+clear classes
+
+% Create two instances of TestClass
+a = TestClass();
+b = TestClass();
+
+% Change the parameters in object 'a'
+a.sam   = 5;
+a.bobby = 10;
+
+% Confirm that the parameters in object 'b' are not changed
+% a.sam   = 5;
+% a.bobby = 10;
+% b.sam   = 1;
+% b.bobby = 2;
+a
+b
+
+% Call the copy object method to create a clone of 'a' using 'b'
+copyobj(a,b);
+% a.copyobj(b);  % Can use this syntax instead
+
+% Check the parameter values for 'a' and 'b' are the same
+% a.sam   = 5;
+% a.bobby = 10;
+% b.sam   = 5;
+% b.bobby = 10;
+a
+b
+
+% Change the parameters in object 'a' again
+a.sam   = 500;
+a.bobby = 1000;
+
+% Confirm the clone (or deep copy) is successfull by comparing 'a' and 'b'
+% a.sam   = 500;
+% a.bobby = 1000;
+% b.sam   = 5;
+% b.bobby = 10;
+a
+b
+
+%% ANOTHER WAY TO CLONE - USING CONSTRUCTOR
+% This procedure implicitly creates a placeholder in memory
+% for cloning the original object by way of the constructor.
+
+clear classes
+
+% Create an object of TestClass
+a = TestClass();
+
+% Change the parameters in object 'a'
+a.sam   = 5;
+a.bobby = 10;
+
+% Create a clone (or deep copy) of object 'a'
+b = TestClass(a);
+
+% Check the parameter values for 'a' and 'b' are the same
+% a.sam   = 5;
+% a.bobby = 10;
+% b.sam   = 5;
+% b.bobby = 10;
+a
+b
+
+% Change the parameters in object 'a' again
+a.sam   = 500;
+a.bobby = 1000;
+
+% Confirm the clone (or deep copy) is successfull by comparing 'a' and 'b'
+% a.sam   = 500;
+% a.bobby = 1000;
+% b.sam   = 5;
+% b.bobby = 10;
+a
+b
+
+##### SOURCE END #####
+--></body></html>

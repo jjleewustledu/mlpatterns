@@ -1,0 +1,602 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      --><title>Test Script for Class CellArrayList</title><meta name="generator" content="MATLAB 7.10"><meta name="date" content="2010-07-20"><meta name="m-file" content="testCellArrayList"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Test Script for Class CellArrayList</h1><!--introduction--><p>Step through and execute this script cell-by-cell to verify a cell array implementation of the List Abstract Data Type (ADT).</p><p>Written by Bobby Nedelkovski MathWorks Australia Copyright 2009-2010, The MathWorks, Inc.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Clean Up</a></li><li><a href="#2">Create Instance of CellArrayList</a></li><li><a href="#3">Check Number of Elements</a></li><li><a href="#4">Append Arbitrary Elements to End of List</a></li><li><a href="#5">Check Number of Elements</a></li><li><a href="#6">Display 'myList'</a></li><li><a href="#7">Seek an Element</a></li><li><a href="#8">Insert Elements in Arbitrary Locations</a></li><li><a href="#9">Display 'myList'</a></li><li><a href="#10">Insert Elements in Arbitrary Locations</a></li><li><a href="#11">Display 'myList'</a></li><li><a href="#12">Check Number of Elements</a></li><li><a href="#13">Retrieve Elements</a></li><li><a href="#14">Retrieve Multiple Elements</a></li><li><a href="#15">Add Duplicate Element</a></li><li><a href="#16">Seek an Element</a></li><li><a href="#17">Try to Remove Elements</a></li><li><a href="#18">Remove Some Elements</a></li><li><a href="#19">Check Number of Elements</a></li><li><a href="#20">Remove All Elements</a></li><li><a href="#21">Check Number of Elements</a></li><li><a href="#22">Create an Array of CellArrayLists</a></li><li><a href="#23">Add Elements to All Lists</a></li><li><a href="#24">Display 'myList'</a></li><li><a href="#25">Add Elements to 2 Lists</a></li><li><a href="#26">Check Number of Elements</a></li><li><a href="#27">Insert Element to 2 Lists in Location 4</a></li><li><a href="#28">Display 'myList'</a></li><li><a href="#29">Check Number of Elements</a></li><li><a href="#30">Append Element to Single List</a></li><li><a href="#31">Check Number of Elements</a></li><li><a href="#32">Seek an Element</a></li><li><a href="#33">Remove Some Elements</a></li><li><a href="#34">Display 'myList'</a></li></ul></div><h2>Clean Up<a name="1"></a></h2><pre class="codeinput">clear <span class="string">classes</span>
+clc
+</pre><pre class="codeoutput">Warning: Objects of 'onCleanup' class exist.  Cannot clear this class or any of its super-classes. 
+</pre><h2>Create Instance of CellArrayList<a name="2"></a></h2><pre class="codeinput">myList = CellArrayList();
+</pre><h2>Check Number of Elements<a name="3"></a></h2><p>empty = 1 len = 0</p><pre class="codeinput">empty = myList.isempty()
+len = myList.length()
+</pre><pre class="codeoutput">empty =
+     1
+len =
+     0
+</pre><h2>Append Arbitrary Elements to End of List<a name="4"></a></h2><pre class="codeinput">myList.add(5);        <span class="comment">% a single integer</span>
+myList.add(rand(2));  <span class="comment">% a 2x2 matrix</span>
+myList.add({50,55});  <span class="comment">% 2 integers as 2 unique elements</span>
+</pre><h2>Check Number of Elements<a name="5"></a></h2><p>empty = 0 len = 4</p><pre class="codeinput">empty = myList.isempty()
+len = myList.length()
+</pre><pre class="codeoutput">empty =
+     0
+len =
+     4
+</pre><h2>Display 'myList'<a name="6"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+     5
+list[1]{2} =
+    0.9593    0.1386
+    0.5472    0.1493
+list[1]{3} =
+    50
+list[1]{4} =
+    55
+
+</pre><h2>Seek an Element<a name="7"></a></h2><p>count = 1 location = 3</p><pre class="codeinput">count = myList.countOf(50)
+location = myList.locationsOf(50)
+</pre><pre class="codeoutput">count =
+     1
+location =
+     3
+</pre><h2>Insert Elements in Arbitrary Locations<a name="8"></a></h2><pre class="codeinput">myList.add({rand(3),5:7},2);  <span class="comment">% a 3x3 matrix and a 1x3 array</span>
+myList.add(myList,5);         <span class="comment">% reference to self!</span>
+</pre><h2>Display 'myList'<a name="9"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+     5
+list[1]{2} =
+    0.2575    0.8143    0.3500
+    0.8407    0.2435    0.1966
+    0.2543    0.9293    0.2511
+list[1]{3} =
+     5     6     7
+list[1]{4} =
+    0.9593    0.1386
+    0.5472    0.1493
+list[1]{5} =
+  CellArrayList handle with no properties.
+list[1]{6} =
+    50
+list[1]{7} =
+    55
+
+</pre><h2>Insert Elements in Arbitrary Locations<a name="10"></a></h2><pre class="codeinput">myList.add({10,11;12,13},6);  <span class="comment">% a 2x2 cell array</span>
+myList.add({150,160,170},4);  <span class="comment">% 3 integers as 3 unique elements</span>
+</pre><h2>Display 'myList'<a name="11"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+     5
+list[1]{2} =
+    0.2575    0.8143    0.3500
+    0.8407    0.2435    0.1966
+    0.2543    0.9293    0.2511
+list[1]{3} =
+     5     6     7
+list[1]{4} =
+   150
+list[1]{5} =
+   160
+list[1]{6} =
+   170
+list[1]{7} =
+    0.9593    0.1386
+    0.5472    0.1493
+list[1]{8} =
+  CellArrayList handle with no properties.
+list[1]{9}{1,1} =
+    10
+list[1]{9}{2,1} =
+    12
+list[1]{9}{1,2} =
+    11
+list[1]{9}{2,2} =
+    13
+list[1]{10} =
+    50
+list[1]{11} =
+    55
+
+</pre><h2>Check Number of Elements<a name="12"></a></h2><p>len = 11</p><pre class="codeinput">len = myList.length()
+</pre><pre class="codeoutput">len =
+    11
+</pre><h2>Retrieve Elements<a name="13"></a></h2><pre class="codeinput">elt = myList.get(4)  <span class="comment">% elt = 150</span>
+elt = myList.get(7)  <span class="comment">% elt = 2x2 rand matrix</span>
+elt = myList.get(9)  <span class="comment">% elt = 2x2 cell array</span>
+</pre><pre class="codeoutput">elt =
+   150
+elt =
+    0.9593    0.1386
+    0.5472    0.1493
+elt = 
+    [10]    [11]
+    [12]    [13]
+</pre><h2>Retrieve Multiple Elements<a name="14"></a></h2><p>elts = {150;160;3x3 rand matrix}</p><pre class="codeinput">elts = myList.get([4:5,2])
+</pre><pre class="codeoutput">elts = 
+    [       150]
+    [       160]
+    [3x3 double]
+</pre><h2>Add Duplicate Element<a name="15"></a></h2><pre class="codeinput">myList.add(5,7);
+</pre><h2>Seek an Element<a name="16"></a></h2><p>count = 2 locations = [1;7]</p><pre class="codeinput">count = myList.countOf(5)
+locations = myList.locationsOf(5)
+</pre><pre class="codeoutput">count =
+     2
+locations =
+     1
+     7
+</pre><h2>Try to Remove Elements<a name="17"></a></h2><p>This yields an empty set [ ] since myList.length()=12 (refer to the specification for remove() in the List abstract class)</p><pre class="codeinput">elts = myList.remove([5:6,20])
+</pre><pre class="codeoutput">elts =
+     []
+</pre><h2>Remove Some Elements<a name="18"></a></h2><p>elts = {160;170;reference to self}</p><pre class="codeinput">elts = myList.remove([5:6,9])
+</pre><pre class="codeoutput">elts = 
+    [              160]
+    [              170]
+    [1x1 CellArrayList]
+</pre><h2>Check Number of Elements<a name="19"></a></h2><p>len = 9</p><pre class="codeinput">len = myList.length()
+</pre><pre class="codeoutput">len =
+     9
+</pre><h2>Remove All Elements<a name="20"></a></h2><pre class="codeinput">elts = myList.remove(1:myList.length())
+</pre><pre class="codeoutput">elts = 
+    [         5]
+    [3x3 double]
+    [1x3 double]
+    [       150]
+    [         5]
+    [2x2 double]
+    {2x2 cell  }
+    [        50]
+    [        55]
+</pre><h2>Check Number of Elements<a name="21"></a></h2><p>empty = 1 len = 0</p><pre class="codeinput">empty = myList.isempty()
+len = myList.length()
+</pre><pre class="codeoutput">empty =
+     1
+len =
+     0
+</pre><h2>Create an Array of CellArrayLists<a name="22"></a></h2><p>Gives a 2x2 CellArrayList</p><pre class="codeinput">myList(2,2) = CellArrayList();
+</pre><h2>Add Elements to All Lists<a name="23"></a></h2><pre class="codeinput">myList.add({rand(3),5:7},2);  <span class="comment">% a 3x3 matrix and a 1x3 array</span>
+myList.add(500,5);            <span class="comment">% a single integer</span>
+</pre><h2>Display 'myList'<a name="24"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[1]{2} =
+     5     6     7
+list[1]{3} =
+   500
+
+***List #2***
+list[2]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[2]{2} =
+     5     6     7
+list[2]{3} =
+   500
+
+***List #3***
+list[3]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[3]{2} =
+     5     6     7
+list[3]{3} =
+   500
+
+***List #4***
+list[4]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[4]{2} =
+     5     6     7
+list[4]{3} =
+   500
+
+</pre><h2>Add Elements to 2 Lists<a name="25"></a></h2><pre class="codeinput">myList(:,1).add({99,100});  <span class="comment">% 2 integers</span>
+</pre><h2>Check Number of Elements<a name="26"></a></h2><p>len = [5,3; 5,3]</p><pre class="codeinput">len = myList.length()
+</pre><pre class="codeoutput">len =
+     5     3
+     5     3
+</pre><h2>Insert Element to 2 Lists in Location 4<a name="27"></a></h2><pre class="codeinput">myList(1,:).add(rand(2),4);  <span class="comment">% a 2x2 rand matrix</span>
+</pre><h2>Display 'myList'<a name="28"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[1]{2} =
+     5     6     7
+list[1]{3} =
+   500
+list[1]{4} =
+    0.7537    0.5678
+    0.3804    0.0759
+list[1]{5} =
+    99
+list[1]{6} =
+   100
+
+***List #2***
+list[2]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[2]{2} =
+     5     6     7
+list[2]{3} =
+   500
+list[2]{4} =
+    99
+list[2]{5} =
+   100
+
+***List #3***
+list[3]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[3]{2} =
+     5     6     7
+list[3]{3} =
+   500
+list[3]{4} =
+    0.7537    0.5678
+    0.3804    0.0759
+
+***List #4***
+list[4]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[4]{2} =
+     5     6     7
+list[4]{3} =
+   500
+
+</pre><h2>Check Number of Elements<a name="29"></a></h2><p>len = [6,4; 5,3]</p><pre class="codeinput">len = myList.length()
+</pre><pre class="codeoutput">len =
+     6     4
+     5     3
+</pre><h2>Append Element to Single List<a name="30"></a></h2><pre class="codeinput">myList(2,1).add(99);  <span class="comment">% an integer</span>
+</pre><h2>Check Number of Elements<a name="31"></a></h2><p>len = [6,4; 6,3]</p><pre class="codeinput">len = myList.length()
+</pre><pre class="codeoutput">len =
+     6     4
+     6     3
+</pre><h2>Seek an Element<a name="32"></a></h2><p>count = [1,0; 2,0] locations = {5,[ ]; [4;6],[ ]}</p><pre class="codeinput">count = myList.countOf(99)
+locations = myList.locationsOf(99)
+</pre><pre class="codeoutput">count =
+     1     0
+     2     0
+locations = 
+    [         5]    [0x1 double]
+    [2x1 double]    [0x1 double]
+</pre><h2>Remove Some Elements<a name="33"></a></h2><p>elts = {{2x2 rand matrix; 99},[ ]; {99; 100},[ ]}</p><pre class="codeinput">elts = myList.remove([4,5])
+elts{1,1}
+elts{2,1}
+</pre><pre class="codeoutput">elts = 
+    {2x1 cell}    []
+    {2x1 cell}    []
+ans = 
+    [2x2 double]
+    [        99]
+ans = 
+    [ 99]
+    [100]
+</pre><h2>Display 'myList'<a name="34"></a></h2><p>Alternatively, you can execute "myList.display()" which produces the same output.</p><pre class="codeinput">myList
+</pre><pre class="codeoutput">
+***List #1***
+list[1]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[1]{2} =
+     5     6     7
+list[1]{3} =
+   500
+list[1]{4} =
+   100
+
+***List #2***
+list[2]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[2]{2} =
+     5     6     7
+list[2]{3} =
+   500
+list[2]{4} =
+    99
+
+***List #3***
+list[3]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[3]{2} =
+     5     6     7
+list[3]{3} =
+   500
+list[3]{4} =
+    0.7537    0.5678
+    0.3804    0.0759
+
+***List #4***
+list[4]{1} =
+    0.6160    0.8308    0.9172
+    0.4733    0.5853    0.2858
+    0.3517    0.5497    0.7572
+list[4]{2} =
+     5     6     7
+list[4]{3} =
+   500
+
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.10<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Test Script for Class CellArrayList
+% Step through and execute this script cell-by-cell to verify a cell array
+% implementation of the List Abstract Data Type (ADT).
+%
+% Written by Bobby Nedelkovski
+% MathWorks Australia
+% Copyright 2009-2010, The MathWorks, Inc.
+
+
+%% Clean Up
+clear classes
+clc
+
+
+%% Create Instance of CellArrayList
+myList = CellArrayList();
+
+
+%% Check Number of Elements
+% empty = 1
+% len = 0
+empty = myList.isempty()
+len = myList.length()
+
+
+%% Append Arbitrary Elements to End of List
+myList.add(5);        % a single integer
+myList.add(rand(2));  % a 2x2 matrix
+myList.add({50,55});  % 2 integers as 2 unique elements
+
+
+%% Check Number of Elements
+% empty = 0
+% len = 4
+empty = myList.isempty()
+len = myList.length()
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+%% Seek an Element
+% count = 1
+% location = 3
+count = myList.countOf(50)
+location = myList.locationsOf(50)
+
+
+%% Insert Elements in Arbitrary Locations
+myList.add({rand(3),5:7},2);  % a 3x3 matrix and a 1x3 array
+myList.add(myList,5);         % reference to self!
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+%% Insert Elements in Arbitrary Locations
+myList.add({10,11;12,13},6);  % a 2x2 cell array
+myList.add({150,160,170},4);  % 3 integers as 3 unique elements
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+%% Check Number of Elements
+% len = 11
+len = myList.length()
+
+
+%% Retrieve Elements
+elt = myList.get(4)  % elt = 150
+elt = myList.get(7)  % elt = 2x2 rand matrix
+elt = myList.get(9)  % elt = 2x2 cell array
+
+
+%% Retrieve Multiple Elements
+% elts = {150;160;3x3 rand matrix}
+elts = myList.get([4:5,2])
+
+
+%% Add Duplicate Element
+myList.add(5,7);
+
+%% Seek an Element
+% count = 2
+% locations = [1;7]
+count = myList.countOf(5)
+locations = myList.locationsOf(5)
+
+
+%% Try to Remove Elements
+% This yields an empty set [ ] since myList.length()=12 (refer to the
+% specification for remove() in the List abstract class)
+elts = myList.remove([5:6,20])
+
+
+%% Remove Some Elements
+% elts = {160;170;reference to self}
+elts = myList.remove([5:6,9])
+
+
+%% Check Number of Elements
+% len = 9
+len = myList.length()
+
+
+%% Remove All Elements
+elts = myList.remove(1:myList.length())
+
+
+%% Check Number of Elements
+% empty = 1
+% len = 0
+empty = myList.isempty()
+len = myList.length()
+
+
+%% Create an Array of CellArrayLists
+% Gives a 2x2 CellArrayList
+myList(2,2) = CellArrayList();
+
+
+%% Add Elements to All Lists
+myList.add({rand(3),5:7},2);  % a 3x3 matrix and a 1x3 array
+myList.add(500,5);            % a single integer
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+%% Add Elements to 2 Lists
+myList(:,1).add({99,100});  % 2 integers
+
+
+%% Check Number of Elements
+% len = [5,3; 5,3]
+len = myList.length()
+
+
+%% Insert Element to 2 Lists in Location 4
+myList(1,:).add(rand(2),4);  % a 2x2 rand matrix
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+%% Check Number of Elements
+% len = [6,4; 5,3]
+len = myList.length()
+
+
+%% Append Element to Single List
+myList(2,1).add(99);  % an integer
+
+
+%% Check Number of Elements
+% len = [6,4; 6,3]
+len = myList.length()
+
+
+%% Seek an Element
+% count = [1,0; 2,0]
+% locations = {5,[ ]; [4;6],[ ]}
+count = myList.countOf(99)
+locations = myList.locationsOf(99)
+
+
+%% Remove Some Elements
+% elts = {{2x2 rand matrix; 99},[ ]; {99; 100},[ ]}
+elts = myList.remove([4,5])
+elts{1,1}
+elts{2,1}
+
+
+%% Display 'myList'
+% Alternatively, you can execute "myList.display()" which produces the same
+% output.
+myList
+
+
+##### SOURCE END #####
+--></body></html>
