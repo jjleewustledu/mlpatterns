@@ -14,7 +14,7 @@ classdef CellArrayList < mlpatterns.List
    %   Copyright 2013, Washington University in Saint Louis
    
    % 2009-Oct-06: Remove property 'numElts' as it's defined in superclass.
-   properties(Access=private)
+   properties(Access=protected)
       capacity;  % Capacity of pre-allocated list
       list;      % Flat Cell Array storage container for elements
    end
@@ -237,14 +237,14 @@ classdef CellArrayList < mlpatterns.List
       % Overloaded.  Specialised display method.
       % 2010-Jul-20: If this obj is an array of CellArrayLists then display
       % each in order.
-      function display(obj)
-         % Use linear index to identify each list in array.
-         for i = 1:numel(obj)
-            fprintf('\n***List #%d***\n',i);
-            celldisp(obj(i).list(1:obj(i).numElts),['list[' int2str(i) ']']);
-         end
-         fprintf('\n');
-      end
+%       function display(obj)
+%          % Use linear index to identify each list in array.
+%          for i = 1:numel(obj)
+%             fprintf('\n***List #%d***\n',i);
+%             celldisp(obj(i).list(1:obj(i).numElts),['list[' int2str(i) ']']);
+%          end
+%          fprintf('\n');
+%       end
       
       function str  = char(thisObj)
           str = cell2str(thisObj.list);
