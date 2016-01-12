@@ -1,5 +1,5 @@
-classdef ValueList
-   %% HANDLELESSLISTINTERFACE 
+classdef (Abstract) ValueList
+   %% VALUELIST is a value-type class as compared to the handle-type class mlpatterns.List 
    %
    %  Written by John J. Lee, Washington University School of Medicine, St Louis, MO, USA
    %  After Bobby Nedelkovski, Mathworks, Australia
@@ -19,7 +19,7 @@ classdef ValueList
       count       = countOf(this,elt)
       locs        = locationsOf(this,elt)
       str         = char(this)
-      this        = display(this) % lhs needed by subsref of Imaging classes
+      %this        = display(this) % lhs needed by subsref of Imaging classes
       iter        = createIterator(this) 
       obj         = clone(this)
    end

@@ -27,8 +27,8 @@ classdef CellArrayList < mlpatterns.List
    % 2010-Jul-20: Methods modified to work with arrays of CellArrayList.
    methods % Public Access
       % Constructor
-      % 2013-Aug-30:  Added copy-constructor as described in mlpatterns.TestCloneClass.  
-      % NB matlab.mixin.Copyable class in recent Matlab versions.  JJL
+      % 2013-Aug-30: Added copy-constructor as described in mlpatterns.TestCloneClass.  
+      % N.B. matlab.mixin.Copyable class in recent Matlab versions.  JJL
       function newObj = CellArrayList(oldObj)
          if nargin == 1 && isa(oldObj, 'mlpatterns.CellArrayList')
              newObj.capacity = oldObj.capacity;
@@ -237,17 +237,25 @@ classdef CellArrayList < mlpatterns.List
       % Overloaded.  Specialised display method.
       % 2010-Jul-20: If this obj is an array of CellArrayLists then display
       % each in order.
-%       function display(obj)
-%          % Use linear index to identify each list in array.
-%          for i = 1:numel(obj)
-%             fprintf('\n***List #%d***\n',i);
-%             celldisp(obj(i).list(1:obj(i).numElts),['list[' int2str(i) ']']);
-%          end
-%          fprintf('\n');
-%       end
+      function disp(obj)
+         % Use linear index to identify each list in array.
+         for i = 1:numel(obj)
+            fprintf('\n***List #%d***\n',i);
+            celldisp(obj(i).list(1:obj(i).numElts),['list[' int2str(i) ']']);
+         end
+         fprintf('\n');
+      end
       
-      function str  = char(thisObj)
-          str = cell2str(thisObj.list);
+      % Overloaded.  Specialized character representation.
+      % 2013-Aug-30: Added support for casting to char.  JJL
+      % 2016-Jan-11: Added support for numel(obj) > 1.  JJL
+      function str = char(obj)
+         % Use linear index to identify each list in array.
+         str = '';
+         for i = 1:numel(obj)
+             str = [str cell2str(obj(i).list, 'IgnoreEmpty', true, 'AsRow', true) ' '];
+         end
+         str = strtrim(str);
       end
       
       % Specialised method to return an iterator array for this list array.
@@ -265,5 +273,5 @@ classdef CellArrayList < mlpatterns.List
          end
       end
    end % methods
-
+   
 end % classdef
