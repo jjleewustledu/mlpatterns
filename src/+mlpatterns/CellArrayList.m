@@ -26,7 +26,7 @@ classdef CellArrayList < mlpatterns.List
    
    % 2010-Jul-20: Methods modified to work with arrays of CellArrayList.
    methods % Public Access
-      % Constructor
+      % Constructor.
       % 2013-Aug-30: Added copy-constructor as described in mlpatterns.TestCloneClass.  
       % N.B. matlab.mixin.Copyable class in recent Matlab versions.  JJL
       function newObj = CellArrayList(oldObj)
@@ -40,6 +40,12 @@ classdef CellArrayList < mlpatterns.List
          newObj.capacity = newObj.INITIAL_CAPACITY;
          newObj.list     = cell(newObj.capacity,1);
          newObj.numElts  = 0;
+      end
+      
+      % Cloning idiom.
+      % 2016-Jan-13: Simply calls the copy-constructor.  JJL
+      function newObj = clone(oldObj)
+          newObj = mlpatterns.CellArrayList(oldObj);
       end
       
       % Concrete implementation.  See List superclass.
@@ -240,7 +246,7 @@ classdef CellArrayList < mlpatterns.List
       function disp(obj)
          % Use linear index to identify each list in array.
          for i = 1:numel(obj)
-            fprintf('\n***List #%d***\n',i);
+            %fprintf('\n***List #%d***\n',i);
             celldisp(obj(i).list(1:obj(i).numElts),['list[' int2str(i) ']']);
          end
          fprintf('\n');
@@ -253,9 +259,9 @@ classdef CellArrayList < mlpatterns.List
          % Use linear index to identify each list in array.
          str = '';
          for i = 1:numel(obj)
-             str = [str cell2str(obj(i).list, 'IgnoreEmpty', true, 'AsRow', true) ' '];
+             str = [str cell2str(obj(i).list, 'IgnoreEmpty', true) ' '];
          end
-         str = strtrim(str);
+         str = str(1:end-1);
       end
       
       % Specialised method to return an iterator array for this list array.
