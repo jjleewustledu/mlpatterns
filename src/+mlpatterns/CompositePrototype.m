@@ -24,6 +24,21 @@ classdef CompositePrototype < mlpatterns.Composite
                 idx = 1;
             end
             c = this.internalList_.get(idx);
+        end        
+        function this = compfun(this, fun, varargin)
+            %% COMPFUN Apply a function to each element of a composite (Composite).
+            %  A = compfun(C, FUN[, ARGS]) applies the function specified by FUN to the
+            %  contents of each element of composite C, and returns the results in
+            %  composite A.  A is the same size as C, and the (I,J,...)th element of A
+            %  is equal to FUN(C{I,J,...}[, ARGS]). FUN is a function handle to a method of C
+            %  that may also take arguments ARGS.  The order in which compfun computes 
+            %  elements of A is not specified and should not be relied on.
+            
+            for c = 1:this.graph_.length
+                tmp = fun(this.graph_.get(c), varargin{:});
+                this.graph_.remove(c);
+                this.graph_.add(tmp, c);
+            end
         end
         
         %% Operator overloading
