@@ -10,18 +10,40 @@ classdef CellComposite < mlpatterns.Composite
  	
 	methods		  
  		function this = CellComposite(varargin)
+            if (nargin == 1 && isa(varargin{1}, 'mlpatterns.CellComposite'))
+                this.cell_ = varargin{1}.cell_;
+                return
+            end
+            
             ip = inputParser;
             addOptional(ip, 'obj', {}, @iscell);
-            parse(ip, varargin{:});
-            
+            parse(ip, varargin{:});            
             this.cell_ = ip.Results.obj;
         end
         
+        function this = add(this, a)
+            this = [this a];
+        end
+        function c    = clone(this)
+            c = mlpatterns.CellComposite(this);
+        end
+        function iter = createIterator(this)
+            iter = mlpatterns.CompositeIterator(this);
+        end
         function t    = ctranspose(this)
             t = this.cell_';
         end
         function this = disp(this)
             disp(this.cell_);
+        end
+        function idx  = find(this, obj)
+            idx = find(cellfun(@(x) isequal(x,obj), this.cell_));
+            if (isempty(idx))
+                idx = [];
+            end
+        end
+        function obj  = get(this, idx)
+            obj = this.cell_{idx};
         end
         function c    = horzcat(this, varargin)
             c = this.cell_;
@@ -40,9 +62,15 @@ classdef CellComposite < mlpatterns.Composite
         function tf   = ismember(this, varargin)
             tf = ismember(this.cell_, varargin{:});
         end
-        function f    = length(this)
-            f = length(this.cell_);
-        end        
+        function len  = length(this)
+            len = length(this.cell_);
+        end
+        function this = rm(this, idx)
+            this.cell_(idx) = [];
+        end
+        function s    = size(this)
+            s = size(this.cell_);
+        end
         function this = subsasgn(this, S, varargin)
             %% SUBSASGN
             %  See also:  web(fullfile(docroot, 'matlab/matlab_oop/class-with-modified-indexing.html'))
@@ -52,9 +80,9 @@ classdef CellComposite < mlpatterns.Composite
                 case '.'
                     this = builtin('subsasgn', this, S, varargin{:});
                 case '{}' 
-                    this = builtin('subsasgn', this.cell_, S, varargin{:});
+                    this.cell_ = builtin('subsasgn', this.cell_, S, varargin{:});
                 case '()'
-                    this = builtin('subsasgn', this.cell_, S, varargin{:});
+                    this.cell_ = builtin('subsasgn', this.cell_, S, varargin{:});
             end
         end
         function varargout = subsref(this, S)
@@ -92,7 +120,7 @@ classdef CellComposite < mlpatterns.Composite
     
     %% PROTECTED
     
-	properties %(Access = 'protected')
+	properties (Access = protected)
         cell_
     end
     

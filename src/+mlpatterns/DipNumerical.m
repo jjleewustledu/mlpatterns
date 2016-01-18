@@ -9,14 +9,24 @@ classdef (Abstract) DipNumerical
  	%% It was developed on Matlab 9.0.0.307022 (R2016a) Prerelease for MACI64.
  	
 	methods (Abstract)
+        dipiqr(this)
+        dipisfinite(this)
+        dipisinf(this)
+        dipisnan(this)
+        dipisreal(this)
+        diplogprod(this)
+        dipmad(this)
         dipmax(this)
-        dipmedian(this)
         dipmean(this)
+        dipmedian(this)
         dipmin(this)
         dipmode(this)
+        dipprctile(this)
         dipprod(this)
+        dipquantile(this)
         dipstd(this)
         dipsum(this)
+        diptrimmean(this)
     end 
 
 	%  Created with Newcl by John J. Lee after newfcn by Frank Gonzalez-Morphy

@@ -1,6 +1,5 @@
-classdef GraphComposite < mlpatterns.CellComposite
-	%% GRAPHCOMPOSITE implements a composite design pattern by one-to-one correspondence
-    %  of elements of a cell array with nodes of a graph.
+classdef GraphComposite < mlpatterns.Composite
+	%% GRAPHCOMPOSITE implements a composite design pattern using graph.
     
 	%  $Revision$
  	%  was created 14-Jan-2016 17:34:02
@@ -14,108 +13,75 @@ classdef GraphComposite < mlpatterns.CellComposite
         Nodes
     end
     
-    methods %% GET
+    methods %% GET/SET
         function g = get.Edges(this)
             g = this.graph_.Edges;
         end
         function g = get.Nodes(this)
             g = this.graph_.Nodes;
         end
+        function this = set.Edges(this, n)
+            this.graph_.Edges = n;
+        end
+        function this = set.Nodes(this, n)
+            this.graph_.Nodes = n;
+        end
     end
     
     methods
         function this = GraphComposite(varargin)
-            this = this@mlpatterns.CellComposite(varargin{:});
-            ip = inputParser;
-            addOptional(ip, 'nodes', {},           @iscell);
-            addOptional(ip, 'graph', this.graph__, @(x) isa(x, 'graph'));
-            parse(ip, varargin{:});
-            
-            this.graph_ = ip.Results.graph;
-            if (length(this.cell_) > numnodes(this.graph_))
-                this.graph_ = addnode(this.graph_, ...
-                                      length(this.cell_) - numnodes(this.graph_));
+            if (nargin == 1 && isa(varargin{1}, 'mlpatterns.CellComposite'))
+                this.graph_ = varargin{1}.graph_;
+                return
             end
+            
+            ip = inputParser;
+            addOptional(ip, 'graph', this.graph, @(x) isa(x, 'graph'));
+            parse(ip, varargin{:});            
+            this.graph_ = ip.Results.graph;
         end
         
+        function this = add(this, a)
+            this = this.addnode(a);
+        end
+        function c    = clone(this)
+            c = mlpatterns.GraphComposite(this);
+        end
+        function iter = createIterator(this)
+            iter = mlpatterns.CompositeIterator(this);
+        end
         function        disp(this)
-            disp(this.cell_);
             disp(this.graph_);
         end  
-        function obj  = horzcat(this, varargin)
-            c = this.cell_;
-            g = this.graph_;
-            for v = 1:length(varargin)
-                if (isa(varargin{v}, 'mlpatterns.GraphComposite'))
-                    c = [c varargin{v}.cell_];
-                    g = addnode(g, varargin{v}.graph_.Nodes);
-                elseif (isa(varargin{v}, 'mlpatterns.CellComposite'))
-                    c = [c varargin{v}.cell_];
-                    g = addnode(g, length(varargin{v}));
-                else
-                    c = [c varargin{v}];
-                    g = addnode(g, length(varargin{v}));
-                end
-            end
-            obj = mlpatterns.GraphComposite(c, g);
+        function idx  = find(this, varargin)
+            idx = this.findnode(varargin{:});
+        end
+        function obj  = get(this, varargin)
+            obj = this.subgraph(varargin{:});
         end
         function tf   = isempty(this)
-            tf = isempty(this.graph_) || isempty(this.cell_);
+            tf = isempty(this.graph_);
         end
         function n    = length(this)
-            n = length(this.cell_);
-            assert(n == numnodes(this.graph_));
+            n = this.numnodes;
         end
-        function this = subsasgn(this, S, varargin)
-            %% SUBSASGN
-            %  See also:  web(fullfile(docroot, 'matlab/matlab_oop/class-with-modified-indexing.html'))
-            %             web(fullfile(docroot, 'matlab/ref/numargumentsfromsubscript.html'))
-            
-            switch (S(1).type)
-                case '.'
-                    this = builtin('subsasgn', this, S, varargin{:});
-                case '{}' 
-                    this = builtin('subsasgn', this.cell_, S, varargin{:});
-                    this.graph_ = addnode(this.graph_, ...
-                                          length(varargin{:}) - dipsum(ismember(this.cell_, varargin{:})));
-                case '()'
-                    this = builtin('subsasgn', this.cell_, S, varargin{:});
-                    this.graph_ = addnode(this.graph_, ...
-                                          length(varargin{:}) - dipsum(ismember(this.cell_, varargin{:})));
-            end
+        function this = rm(this, varargin)
+            this = this.rmnode(varargin{:});
         end
-        function obj  = vertcat(this, varargin)
-            c = this.cell_;
-            g = this.graph_;
-            for v = 1:length(varargin)
-                if (isa(varargin{v}, 'mlpatterns.GraphComposite'))
-                    c = [c; varargin{v}.cell_];
-                    g = addnode(g, varargin{v}.graph_.Nodes);
-                elseif (isa(varargin{v}, 'mlpatterns.CellComposite'))
-                    c = [c; varargin{v}.cell_];
-                    g = addnode(g, length(varargin{v}));
-                else
-                    c = [c; varargin{v}];
-                    g = addnode(g, length(varargin{v}));
-                end
-            end
-            obj = mlpatterns.GraphComposite(c, g);
+        function s    = size(this)
+            s = this.numnodes;
         end
         
         %% Access and Modify Nodes and Edges
         
         function this  = addnode(this, varargin)
-            this = horzcat(this, varargin{:});
+            this.graph_ = addnode(this.graph_, varargin{:});
         end
         function this  = addedge(this, varargin)
             this.graph_ = addedge(this.graph_, varargin{:});
         end
         function this  = rmnode(this, varargin)
-            for v = 1:length(varargin)
-                assert(isnumeric(varargin{v}));
-                this.cell_{varargin{v}} = [];
-                this.graph_ = rmnode(this.graph_, varargin{v});
-            end
+            this.graph_ = rmnode(this.graph_, varargin{:});
         end
         function this  = rmedge(this, varargin)
             this.graph_ = rmedge(this.graph_, varargin{:});
@@ -128,7 +94,6 @@ classdef GraphComposite < mlpatterns.CellComposite
         end
         function n     = numnodes(this)
             n = numnode(this.graph_);
-            assert(n == length(this.cell_));
         end
         function n     = numedges(this)
             n = numedge(this.graph_);
@@ -206,25 +171,6 @@ classdef GraphComposite < mlpatterns.CellComposite
     
     properties %(Access = 'protected')
         graph_
-    end
-    
-    methods (Access = 'protected')
-        function g = graph__(this)
-            len = length(this.cell_);
-            A = ones(len) - diag(ones(1,len));
-            
-            names = cell(size(this.cell_));
-            for n = 1:length(names)
-                try
-                    names{n} = char(this.cell_{n});
-                catch ME
-                    names{n} = 'unknown';
-                    handwarning(ME);                    
-                end
-            end
-            
-            g = graph(A, names);
-        end
     end
     
 	%  Created with Newcl by John J. Lee after newfcn by Frank Gonzalez-Morphy 

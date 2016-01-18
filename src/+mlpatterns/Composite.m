@@ -9,14 +9,16 @@ classdef Composite
  	%% It was developed on Matlab 9.0.0.307022 (R2016a) Prerelease for MACI64.
 	    
     methods (Abstract)
-        disp(this)
-        horzcat(this, varargin)
-        isempty(this)
-        length(this)
-        subsasgn(this, S, RHS)
-        subsref(this, S)
-        vertcat(this, varargin)
-        
+        this = add(this, obj)
+        obj  = clone(this)
+        iter = createIterator(this)
+               disp(this)
+        idx  = find(this, obj)
+        obj  = get(this, idx)
+        tf   = isempty(this)
+        len  = length(this)
+               rm(this, idx)
+        s    = size(this)        
     end
     
 	%  Created with Newcl by John J. Lee after newfcn by Frank Gonzalez-Morphy 

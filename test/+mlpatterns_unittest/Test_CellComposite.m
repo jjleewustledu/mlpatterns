@@ -46,6 +46,10 @@ classdef Test_CellComposite < matlab.unittest.TestCase
             import mlpatterns.*;
             this.verifyEqual( [this.testObj  this.testObj], ...
                 CellComposite([this.testCA   this.testCA]));
+            this.verifyEqual( [this.testObj  this.testCA], ...
+                CellComposite([this.testCA   this.testCA]));
+            this.verifyError(@() this.verifyEqual( [this.testCA   this.testObj], ...
+                CellComposite([this.testCA   this.testCA])), 'MATLAB:structRefFromNonStruct');
             this.verifyEqual( [this.testObj; this.testObj], ...
                 CellComposite([this.testCA;  this.testCA]));
         end
@@ -61,6 +65,57 @@ classdef Test_CellComposite < matlab.unittest.TestCase
             this.verifyEqual(tmp{3}{3}{3}, [1 2 3]);
             this.verifyEqual(tmp{3}{3}{3}(3), 3);
             this.verifyEqual(tmp{3}{3}{4}.afield, 'a value');
+        end
+        function test_subsasgn(this)
+            this.testObj{4} = 'Z';
+            this.verifyInstanceOf(this.testObj, 'mlpatterns.CellComposite');
+            this.verifyEqual(this.testObj{4}, 'Z');
+        end
+        function test_add(this)
+            this.testObj = this.testObj.add('Z');            
+            this.verifyInstanceOf(this.testObj, 'mlpatterns.CellComposite');
+            this.verifyEqual(this.testObj{4}, 'Z');
+        end
+        function test_clone(this)
+            c = this.testObj.clone;
+            this.verifyInstanceOf(c, 'mlpatterns.CellComposite');
+            for ic = 1:length(c)
+                this.verifyEqual(c{ic}, this.testObj{ic});
+            end
+        end
+        function test_copyCtor(this)
+            c = mlpatterns.CellComposite(this.testObj);
+            this.verifyInstanceOf(c, 'mlpatterns.CellComposite');
+            for ic = 1:length(c)
+                this.verifyEqual(c{ic}, this.testObj{ic});
+            end
+        end
+        function test_createIterator(this)
+            iter = this.testObj.createIterator;
+            this.verifyEqual(iter.next, 'A');
+            this.verifyEqual(iter.next, 'B');
+            this.verifyEqual(iter.next, ...
+                {'C' 'D' {'E' 'F' [11 22 33] struct('AFIELD', 'A VALUE')}});
+            this.verifyFalse(iter.hasNext);
+            iter.reset;
+            this.verifyTrue(iter.hasNext);            
+            this.verifyEqual(iter.next, 'A');
+        end
+        function test_find(this)
+            this.verifyEqual(this.testObj.find('B'), 2);
+            this.verifyEqual(this.testObj.find('C'), []);
+        end
+        function test_get(this)
+            this.verifyEqual(this.testObj.get(1), 'A');
+            this.verifyEqual(this.testObj.get(2), 'B');
+            this.verifyEqual(this.testObj.get(3), ...
+                {'C' 'D' {'E' 'F' [11 22 33] struct('AFIELD', 'A VALUE')}});
+        end
+        function test_rm(this)
+            removed = this.testObj.rm(3);
+            for i = 1:length(removed)
+                this.verifyEqual(removed{i}, this.testObj{i});
+            end
         end
 	end
 
