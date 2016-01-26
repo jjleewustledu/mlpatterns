@@ -10,15 +10,15 @@ classdef Composite
 	    
     methods (Abstract)
         this = add(this, obj)
-        obj  = clone(this)
+        %obj  = clone(this)
         iter = createIterator(this)
-               disp(this)
+        %       disp(this)
         idx  = find(this, obj)
         obj  = get(this, idx)
         tf   = isempty(this)
         len  = length(this)
                rm(this, idx)
-        s    = size(this)        
+        s    = csize(this)        
     end
     
 	%  Created with Newcl by John J. Lee after newfcn by Frank Gonzalez-Morphy 

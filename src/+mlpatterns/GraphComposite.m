@@ -68,7 +68,7 @@ classdef GraphComposite < mlpatterns.Composite
         function this = rm(this, varargin)
             this = this.rmnode(varargin{:});
         end
-        function s    = size(this)
+        function s    = csize(this)
             s = this.numnodes;
         end
         

@@ -20,6 +20,8 @@ classdef Test_CellComposite < matlab.unittest.TestCase
  	end
 
 	methods (Test)
+        function test_stub(this)
+        end
 		function test_cell(this)
             this.verifyEqual(this.testCA{1}, 'A');
             this.verifyEqual(this.testCA(1), {'A'});
@@ -90,6 +92,9 @@ classdef Test_CellComposite < matlab.unittest.TestCase
                 this.verifyEqual(c{ic}, this.testObj{ic});
             end
         end
+        function test_length(this)
+            this.verifyEqual(length(this.testObj), 3);
+        end
         function test_createIterator(this)
             iter = this.testObj.createIterator;
             this.verifyEqual(iter.next, 'A');
@@ -121,9 +126,9 @@ classdef Test_CellComposite < matlab.unittest.TestCase
 
  	methods (TestClassSetup)
 		function setupCellComposite(this)
- 			import mlpatterns.*;
- 			this.testObj_ = CellComposite(this.testCA);
-            this.testObj_.testProperty = this.testca;
+			import mlpatterns.*;
+			this.testObj_ = CellComposite(this.testCA);
+          this.testObj_.testProperty = this.testca;
  		end
 	end
 

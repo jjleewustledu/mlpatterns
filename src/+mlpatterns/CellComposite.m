@@ -21,8 +21,8 @@ classdef CellComposite < mlpatterns.Composite
             this.cell_ = ip.Results.obj;
         end
         
-        function this = add(this, a)
-            this = [this a];
+        function this = add(this, varargin)
+            this = [this varargin{:}];
         end
         function c    = clone(this)
             c = mlpatterns.CellComposite(this);
@@ -33,7 +33,7 @@ classdef CellComposite < mlpatterns.Composite
         function t    = ctranspose(this)
             t = this.cell_';
         end
-        function this = disp(this)
+        function        disp(this)
             disp(this.cell_);
         end
         function idx  = find(this, obj)
@@ -50,8 +50,10 @@ classdef CellComposite < mlpatterns.Composite
             for v = 1:length(varargin)
                 if (isa(varargin{v}, 'mlpatterns.CellComposite'))
                     c = [c varargin{v}.cell_];
+                elseif (iscell(varargin{v}))
+                    c = [c  varargin{v} ];
                 else
-                    c = [c varargin{v}];
+                    c = [c {varargin{v}}]; %#ok<CCAT1> % suppressed for clarity
                 end
             end
             c = mlpatterns.CellComposite(c);
@@ -68,7 +70,7 @@ classdef CellComposite < mlpatterns.Composite
         function this = rm(this, idx)
             this.cell_(idx) = [];
         end
-        function s    = size(this)
+        function s    = csize(this)
             s = size(this.cell_);
         end
         function this = subsasgn(this, S, varargin)
@@ -93,7 +95,7 @@ classdef CellComposite < mlpatterns.Composite
             switch (S(1).type)
                 case '.'
                      varargout = {builtin('subsref', this, S)};
-                 case '{}'
+                case '{}'
                      varargout = {builtin('subsref', this.cell_, S)};
                 case '()'
                      varargout = {builtin('subsref', this.cell_, S)};
@@ -120,7 +122,7 @@ classdef CellComposite < mlpatterns.Composite
     
     %% PROTECTED
     
-	properties (Access = protected)
+	properties %(Access = protected)
         cell_
     end
     
