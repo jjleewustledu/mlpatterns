@@ -8,7 +8,7 @@ classdef CellComposite < mlpatterns.Composite
  	%  and checked into repository /Users/jjlee/Local/src/mlcvl/mlpatterns/src/+mlpatterns.
  	%% It was developed on Matlab 9.0.0.307022 (R2016a) Prerelease for MACI64.
  	
-	methods		  
+	methods
  		function this = CellComposite(varargin)
             if (nargin == 1 && isa(varargin{1}, 'mlpatterns.CellComposite'))
                 this.cell_ = varargin{1}.cell_;
