@@ -228,11 +228,13 @@ classdef CellArrayList < mlpatterns.List
       end
       
       % Concrete implementation.  See List superclass.
+      % JJL 2017aug1:  swapped order of args of isequal() to avoid exception
+      % "Struct contents reference from a non-struct arrray object"
       function locs = locationsOf(obj,elt)
          locs = cell(size(obj));
          % Use linear index to populate locs cell array.
          for i = 1:numel(obj)
-            locs{i} = find(cellfun(@(c) isequal(c,elt),obj(i).list));
+            locs{i} = find(cellfun(@(c) isequal(elt, c),obj(i).list));
          end
          % Return numerical array if single list operation.
          if numel(locs) == 1
