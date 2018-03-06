@@ -13,12 +13,12 @@ classdef (Sealed) Registry < mlpatterns.Singleton
       dipcommon  = '/opt/dip/common/';
       dipos
       docroot
-      fslroot    = '/opt/fsl/';
-      fsfasthome = '/opt/freesurfer/fsfast';
+      fslroot    = '/usr/local/fsl/';
+      fsfasthome = '/Applications/freesurfer/fsfast';
       homeroot   = [getenv('HOME') '/'];
       llpenv
       mexroot    = [getenv('HOME') '/Local/mex'];
-      srcroot    = [getenv('HOME') '/Local/src'];
+      srcroot    = [getenv('HOME') '/MATLAB-Drive'];
       randstream
    end
    
@@ -99,7 +99,7 @@ classdef (Sealed) Registry < mlpatterns.Singleton
           %end
           try
               dip_initialise
-              dipsetpref('CommandFilePath',[obj.srcroot, 'mlcvl/dipcommands']);
+              dipsetpref('CommandFilePath',[obj.srcroot, 'dipcommands']);
               dipsetpref('imagefilepath',   pwd);
           catch ME 
               [s, s1] = system(['echo $' obj.llpenv]);
@@ -113,7 +113,7 @@ classdef (Sealed) Registry < mlpatterns.Singleton
       function       setFslPath()
           obj = mlpatterns.Registry.instance();
           path( ...
-              fullfile(obj.srcroot,  'mlcvl/mlniftitools/global'), path);
+              fullfile(obj.srcroot,  'mlniftitools/global'), path);
           if (isempty(strfind(path, obj.fslroot(1:end-1))))
               path(...
                   fullfile(obj.fslroot,  'etc/matlab'), path);
@@ -131,10 +131,10 @@ classdef (Sealed) Registry < mlpatterns.Singleton
           obj = mlpatterns.Registry.instance();
           if (isempty(strfind(path, 'matlab_xunit/tests')))
               assert(~verLessThan('matlab', '7.11.0'));
-                  path(fullfile(obj.srcroot, 'mlcvl/matlab_xunit/tests'), path);
-                  path(fullfile(obj.srcroot, 'mlcvl/mlniftitools/test'), path);
+                  path(fullfile(obj.srcroot, 'matlab_xunit/tests'), path);
+                  path(fullfile(obj.srcroot, 'mlniftitools/test'), path);
               for p = 1:length(obj.MLPACKAGES) %#ok<*FORFLG>
-                  path(fullfile(obj.srcroot, 'mlcvl', obj.MLPACKAGES{p}, 'test'), path);
+                  path(fullfile(obj.srcroot, obj.MLPACKAGES{p}, 'test'), path);
               end
           end
       end
@@ -144,19 +144,19 @@ classdef (Sealed) Registry < mlpatterns.Singleton
           if (isempty(strfind(path, 'mfiles')))
               assert(~verLessThan('matlab', '7.11.0'));
               path([...
-                  fullfile(obj.srcroot, 'mlcvl/dicom_sort_convert/src') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/dicom_spectrum/src') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/export_fig') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/explorestruct') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/lutbar') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/matlab_xunit/xunit') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/mfiles') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/mlniftitools/src/') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/StructBrowser') pathsep ...
-                  fullfile(obj.srcroot, 'mlcvl/xml_io_tools') ...
+                  fullfile(obj.srcroot, 'dicom_sort_convert/src') pathsep ...
+                  fullfile(obj.srcroot, 'dicom_spectrum/src') pathsep ...
+                  fullfile(obj.srcroot, 'export_fig') pathsep ...
+                  fullfile(obj.srcroot, 'explorestruct') pathsep ...
+                  fullfile(obj.srcroot, 'lutbar') pathsep ...
+                  fullfile(obj.srcroot, 'matlab_xunit/xunit') pathsep ...
+                  fullfile(obj.srcroot, 'mfiles') pathsep ...
+                  fullfile(obj.srcroot, 'mlniftitools/src/') pathsep ...
+                  fullfile(obj.srcroot, 'StructBrowser') pathsep ...
+                  fullfile(obj.srcroot, 'xml_io_tools') ...
                   ], path);
               for p = 1:length(obj.MLPACKAGES) %#ok<*FORFLG>
-                  path(fullfile(obj.srcroot, 'mlcvl', obj.MLPACKAGES{p}, 'src'), path);
+                  path(fullfile(obj.srcroot, obj.MLPACKAGES{p}, 'src'), path);
               end
           end
           
