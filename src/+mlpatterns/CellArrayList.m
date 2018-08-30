@@ -1,4 +1,4 @@
-classdef CellArrayList < mlpatterns.List
+classdef CellArrayList < matlab.mixin.Copyable & mlpatterns.List
    %CELLARRAYLIST A cell array realisation of the List ADT
    %   Refer to the description in the abstract superclass List for
    %   full detail.  This class is a concrete implementation of the List
@@ -264,6 +264,17 @@ classdef CellArrayList < mlpatterns.List
              str = [str cell2str(obj(i).list, 'IgnoreEmpty', true) ' '];
          end
          str = str(1:end-1);
+      end
+      
+      % Overloaded.  Specialized cell representation.
+      % 2018-Aug-15: Added support for casting to cell.  JJL
+      % 2016-Aug-15: Added support for numel(obj) > 1.  JJL
+      function c = cell(obj)
+         % Use linear index to identify each list in array.
+         c = {};
+         for i = 1:numel(obj)
+             c = [c obj(i).list]; %#ok<AGROW>
+         end
       end
       
       % Specialised method to return an iterator array for this list array.
