@@ -1,4 +1,4 @@
-classdef SingletonImpl < Singleton
+classdef SingletonImpl < mlpatterns.Singleton
    %SINGLETONIMPL Concrete Implementation of Singleton OOP Design Pattern
    %   Refer to the description in the abstract superclass Singleton for
    %   full detail.
@@ -36,14 +36,4 @@ classdef SingletonImpl < Singleton
          end
       end
    end
-   
-   %*** Define your own methods for SingletonImpl.
-   methods % Public Access
-      function myOperation(obj, val)
-         % Just assign the input value to singletonData.  See Singleton
-         % superclass.
-         obj.setSingletonData(val);
-      end
-   end
-   
 end
