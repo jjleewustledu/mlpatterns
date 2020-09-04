@@ -40,6 +40,7 @@ classdef (Abstract) HandleNumerical < handle
         
         char(this)
         double(this)
+        find(this)
         ones(this)
         rank(this)
         scrubNanInf(this)
