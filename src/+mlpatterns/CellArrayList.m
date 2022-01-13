@@ -257,13 +257,18 @@ classdef CellArrayList < matlab.mixin.Copyable & mlpatterns.List
       % Overloaded.  Specialized character representation.
       % 2013-Aug-30: Added support for casting to char.  JJL
       % 2016-Jan-11: Added support for numel(obj) > 1.  JJL
+      % 2021-Dec-04: Added string(obj).  JJL
       function str = char(obj)
          % Use linear index to identify each list in array.
          str = '';
          for i = 1:numel(obj)
-             str = [str cell2str(obj(i).list, 'IgnoreEmpty', true) ' '];
+             str = [str cell2str(obj(i).list, 'AsRow', false, 'IgnoreEmpty', true) ' ']; %#ok<AGROW> 
          end
          str = str(1:end-1);
+      end
+      function str = string(obj)
+         % Use linear index to identify each list in array.
+         str = convertCharsToStrings(char(obj));
       end
       
       % Overloaded.  Specialized cell representation.
