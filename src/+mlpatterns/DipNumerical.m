@@ -1,4 +1,4 @@
-classdef (Abstract) DipNumerical 
+classdef (Abstract, HandleCompatible) DipNumerical < handle
 	%% DIPNUMERICAL  
 
 	%  $Revision$
