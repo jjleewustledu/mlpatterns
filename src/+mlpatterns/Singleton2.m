@@ -5,24 +5,20 @@ classdef (Abstract) Singleton2 < handle
     %  Copyright 2009, The MathWorks, Inc.
     
     methods (Static, Abstract)
-        this = instance(varargin)
-        %% INSTANCE
-        %  @param optional qualifier is char \in {'initialize' ''}
-        % 
-        % ip = inputParser;
-        % addOptional(ip, 'qualifier', '', @ischar)
-        % parse(ip, varargin{:})
-        % 
+        this = instance(reset)
+        % arguments
+        %     reset = []
+        % end
         % persistent uniqueInstance
-        % if (strcmp(ip.Results.qualifier, 'initialize'))
+        % if ~isempty(reset)
         %     uniqueInstance = [];
         % end
         % if (isempty(uniqueInstance))
-        %     this = mlpatterns.Singleton2();
+        %     this = mlvg.Ccir1211Registry();
         %     uniqueInstance = this;
         % else
         %     this = uniqueInstance;
-        % end        
+        % end      
     end
     
     methods (Access = protected)
